@@ -64,6 +64,7 @@ const getResponseToAlb = ({
       return acc
     }, {})
     : undefined
+  console.log('alb-headers', headers)
 
   return {
     statusCode,
