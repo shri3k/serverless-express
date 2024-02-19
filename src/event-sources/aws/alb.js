@@ -4,7 +4,10 @@ const { getRequestValuesFromEvent, getMultiValueHeaders } = require('../utils')
 function getPathWithQueryStringUseUnescapeParams ({
   event,
   // NOTE: Use `event.pathParameters.proxy` if available ({proxy+}); fall back to `event.path`
-  path = (event.pathParameters && event.pathParameters.proxy && `/${event.pathParameters.proxy}`) || event.path,
+  path = (event.pathParameters &&
+    event.pathParameters.proxy &&
+    `/${event.pathParameters.proxy}`) ||
+    event.path,
   // NOTE: Strip base path for custom domains
   stripBasePath = '',
   replaceRegex = new RegExp(`^${stripBasePath}`)
@@ -14,7 +17,9 @@ function getPathWithQueryStringUseUnescapeParams ({
   if (event.multiValueQueryStringParameters) {
     for (const key in event.multiValueQueryStringParameters) {
       const formattedKey = decodeUrlencoded(key)
-      query[formattedKey] = event.multiValueQueryStringParameters[key].map(value => decodeUrlencoded(value))
+      query[formattedKey] = event.multiValueQueryStringParameters[key].map(
+        (value) => decodeUrlencoded(value)
+      )
     }
   } else {
     for (const key in event.queryStringParameters) {
@@ -49,7 +54,10 @@ const getResponseToAlb = ({
   headers: responseHeaders,
   isBase64Encoded
 }) => {
-  const multiValueHeaders = !event.headers ? getMultiValueHeaders({ headers: responseHeaders }) : undefined
+  const multiValueHeaders = !event.headers
+    ? getMultiValueHeaders({ headers: responseHeaders })
+    : undefined
+  console.log('---multiValueHeaders---', multiValueHeaders)
   const headers = event.headers
     ? Object.entries(responseHeaders).reduce((acc, [k, v]) => {
       acc[k] = Array.isArray(v) ? v[0] : v
